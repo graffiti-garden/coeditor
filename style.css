@@ -1,0 +1,33 @@
+:root {
+  --cursorcolor: blue;
+}
+body {
+  background: grey;
+  display: flex;
+  justify-content: center;
+}
+
+p {
+  padding: 2em;
+  width: 30em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: white;
+  box-shadow: 0.2em 0.2em 0.2em;
+}
+
+input {
+  width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 1px solid var(--cursorcolor);
+  animation: blinker 1s linear infinite;
+  display: inline;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

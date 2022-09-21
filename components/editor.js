@@ -113,9 +113,9 @@ export default function({myID, useCollection}) { return {
   template: `
     <input autofocus v-focus v-if="cursorIndex==0"
       @keydown="keydown($event.key)"/>
-    <template v-for="(character, index) of liveCharacters">
-      {{ character.string }}<!>
-      <input v-focus v-if="cursorIndex==index+1"
+    <span v-for="(character, index) of liveCharacters" @click="cursorIndex=index">
+      {{ character.string }}<input
+        v-focus v-if="cursorIndex==index+1"
         @keydown="keydown($event.key)"/>
-    </template>`
+    </span>`
 }}
