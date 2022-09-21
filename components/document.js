@@ -2,8 +2,11 @@ import Logoot from 'https://graffiti.csail.mit.edu/graffiti-x-js/logoot.js'
 
 export default function({myID, useCollection}) { return {
 
-  setup: ()=> ({
-    characters: useCollection({
+  props: ["ID"],
+
+  setup: (props)=> ({
+    characters: useCollection(()=> ({
+      fileID: props.ID,
       id: { $type: 'string' },
       timestamp: { $type: 'number' },
       $or: [{
@@ -12,7 +15,7 @@ export default function({myID, useCollection}) { return {
       }, {
         type: 'tombstone'
       }]
-    })
+    }))
   }),
 
   computed: {
@@ -66,9 +69,13 @@ export default function({myID, useCollection}) { return {
         // Otherwise place a tombstone
         } else {
           this.characters.update({
+            fileID: this.ID,
             type: "tombstone",
             id: id,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            _inContextIf: [{
+              _queryFailsWithout: ['fileID']
+            }]
           })
         }
 
@@ -86,10 +93,14 @@ export default function({myID, useCollection}) { return {
           Logoot.after : this.liveCharacters[cursorIndex].order
 
         this.characters.update({
+          fileID: this.ID,
           id: crypto.randomUUID(),
           timestamp: Date.now(),
           string: key,
-          order: Logoot.between(lowerBound, upperBound)
+          order: Logoot.between(lowerBound, upperBound),
+          _inContextIf: [{
+            _queryFailsWithout: ['fileID']
+          }]
         })
         await this.$nextTick()
         event.target.selectionEnd = cursorIndex+1

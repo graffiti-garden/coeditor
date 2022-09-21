@@ -9,17 +9,38 @@
 <body>
 
   <div id="app">
-    <editor></editor>
+    <navigation></navigation>
   </div>
 
   <script src="https://unpkg.com/vue@3.2.37/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4.0.16/dist/vue-router.global.prod.js"></script>
   <script type="module">
     import Graffiti from 'https://graffiti.csail.mit.edu/graffiti-x-vue/graffiti.js'
-    import Editor from './components/editor.js'
+    import Navigation from './components/navigation.js'
+
+    const focus = {
+      mounted: el => el.focus()
+    }
 
     Graffiti(Vue).then(graffiti=> {
+      const Router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes: [{
+          path: '/',
+          component: async ()=>
+            (await import('./components/drive.js')).default(graffiti)
+        }, {
+          path: '/document/:ID',
+          props: true,
+          component: async ()=>
+            (await import('./components/document.js')).default(graffiti)
+        }]
+      })
+
       Vue.createApp()
-        .component('Editor', Editor(graffiti))
+        .use(Router)
+        .component('Navigation', Navigation(graffiti))
+        .directive('focus', focus)
         .mount('#app')
     })
   </script>
