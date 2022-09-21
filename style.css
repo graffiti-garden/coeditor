@@ -14,7 +14,6 @@ details {
 }
 
 details > summary {
-  user-select: none;
   cursor: pointer;
 }
 
@@ -146,11 +145,18 @@ details menu {
 }
 
 input[type="checkbox"] {
-  margin: 0.5rem;
-  margin-right: 1rem;
+  margin: 0.7rem;
   transform: scale(1.5);
 }
 
-label:hover {
+label {
+  user-select: none;
+}
+
+details button {
+  margin-left: 0.7rem;
+}
+
+:is(input[type="checkbox"],label):hover {
   cursor: pointer;
 }

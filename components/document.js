@@ -119,6 +119,12 @@ export default function({myID, useCollection}) { return {
         await this.$nextTick()
         event.target.selectionEnd = cursorIndex+1
       }
+    },
+
+    removeAllMine() {
+      if (confirm("Are you sure you want to delete all your edits? This can't be undone.")) {
+        this.characters.removeMine()
+      }
     }
   },
 
@@ -143,6 +149,9 @@ export default function({myID, useCollection}) { return {
               @input="e=>blockedUsers.has(author)?blockedUsers.delete(author):blockedUsers.add(author)">
             <Name :ID="author"/>
           </label>
+          <button v-if="author=='${myID}'" @click="removeAllMine">
+            Remove all my edits
+          </button>
         </li>
       </menu>
     </details>
