@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Graffiti Collaborative Text Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./docs/style.css" rel="stylesheet" />
+</head>
+<body>
+
+  <div id="app">
+    <pre>
+      <editor></editor>
+    </pre>
+  </div>
+
+  <script src="https://unpkg.com/vue@3.2.37/dist/vue.global.prod.js"></script>
+  <script type="module">
+    import Graffiti from 'https://graffiti.csail.mit.edu/graffiti-x-vue/graffiti.js'
+    import Editor from './components/editor.js'
+
+    Graffiti(Vue).then(graffiti=> {
+      Vue.createApp()
+        .component('Editor', Editor(graffiti))
+        .mount('#app')
+    })
+  </script>
+</body>
+</html>
