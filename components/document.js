@@ -154,7 +154,7 @@ export default function({myID, useCollection}) { return {
         <summary>
           Authors:
           <template v-for="(author, index) in liveAuthors">
-            <a :href="'https://graffiti.csail.mit.edu/namebook/#/profile/'+author">
+            <a :href="'../namebook/#/profile/'+author">
               <Name :ID="author"/><!>
             </a>
             <template v-if="index<liveAuthors.length-1">,
