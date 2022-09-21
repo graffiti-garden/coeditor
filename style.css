@@ -7,17 +7,31 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+details {
+  border-bottom: 1px solid black;
+  background: lightgrey;
+  padding: 1em;
+}
+
+details > summary {
+  user-select: none;
+  cursor: pointer;
+}
+
+textarea, details {
+  width: 35em;
+}
+
 textarea {
   padding: 2em;
-  width: 35em;
+  background: whitesmoke;
   min-height: 80vh;
   outline: 0;
   border: 0;
-  background: whitesmoke;
   font-family: inherit;
 }
 
-textarea, dialog {
+textarea, dialog, details {
   box-shadow: 0.2em 0.2em 0.2em;
 }
 
@@ -51,7 +65,7 @@ header {
   background: NavajoWhite;
 }
 
-menu {
+header menu {
   display: flex;
   justify-content: space-between;
   padding: 0;
@@ -71,6 +85,11 @@ dialog {
   padding: 2em;
   width: 40em;
   border: 2px outset tan;
+  text-align: center;
+}
+
+dialog h1 {
+  padding-bottom: 2rem;
 }
 
 table {
@@ -92,7 +111,8 @@ tr:nth-child(even) {
 
 main {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 2em;
 }
 
@@ -116,11 +136,21 @@ button:active {
   border: 2px inset lightgrey;
 }
 
-h1 {
-  text-align: center;
-  padding-bottom: 2rem;
-}
-
 input {
   font-size: inherit;
+}
+
+details menu {
+  padding: 0.7rem;
+  padding-bottom: 0;
+}
+
+input[type="checkbox"] {
+  margin: 0.5rem;
+  margin-right: 1rem;
+  transform: scale(1.5);
+}
+
+label:hover {
+  cursor: pointer;
 }

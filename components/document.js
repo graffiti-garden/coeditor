@@ -1,6 +1,9 @@
 import Logoot from 'https://graffiti.csail.mit.edu/graffiti-x-js/logoot.js'
+import Name from './name.js'
 
 export default function({myID, useCollection}) { return {
+
+  components: { Name: Name(...arguments) },
 
   props: ["ID"],
 
@@ -18,9 +21,20 @@ export default function({myID, useCollection}) { return {
     }))
   }),
 
+  data: ()=> ({
+    blockedUsers: new Set()
+  }),
+
   computed: {
+    liveAuthors() {
+      return this.characters.authors.filter(
+        x=>!this.blockedUsers.has(x))
+    },
+
     characterGroups() {
-      const groups = this.characters.groupBy('id')
+      const groups = this.characters
+        .filter(c=> this.liveAuthors.includes(c._by))
+        .groupBy('id')
       for (const id in groups) {
         groups[id] = groups[id].sortBy('-timestamp')
       }
@@ -41,7 +55,7 @@ export default function({myID, useCollection}) { return {
     text() {
       return this.liveCharacters.reduce(
         (prev, curr)=> prev.concat(curr.string), '')
-    }
+    },
   },
 
   methods: {
@@ -108,5 +122,29 @@ export default function({myID, useCollection}) { return {
     }
   },
 
-  template: '<textarea @keydown="keydown($event)" :value="text" />'
+  template: `
+    <details>
+      <summary>
+        Authors:
+        <template v-for="(author, index) in liveAuthors">
+          <a :href="'https://graffiti.csail.mit.edu/namebook/#/profile/'+author">
+            <Name :ID="author"/><!>
+          </a>
+          <template v-if="index<liveAuthors.length-1">,
+          </template>
+        </template>
+      </summary>
+
+      <menu>
+        <li v-for="author in characters.authors">
+          <label>
+            <input type="checkbox"
+              :checked="!blockedUsers.has(author)"
+              @input="e=>blockedUsers.has(author)?blockedUsers.delete(author):blockedUsers.add(author)">
+            <Name :ID="author"/>
+          </label>
+        </li>
+      </menu>
+    </details>
+    <textarea @keydown="keydown($event)" :value="text" />`
 }}
