@@ -18,6 +18,13 @@ export default function({myID, useCollection}) { return {
       }, {
         type: 'tombstone'
       }]
+    })),
+    file: useCollection(()=> ({
+      id: props.ID,
+      timestamp: { $type: 'number' },
+      type: 'text/plain',
+      _by: myID,
+      _to: myID
     }))
   }),
 
@@ -129,31 +136,46 @@ export default function({myID, useCollection}) { return {
   },
 
   template: `
-    <details>
-      <summary>
-        Authors:
-        <template v-for="(author, index) in liveAuthors">
-          <a :href="'https://graffiti.csail.mit.edu/namebook/#/profile/'+author">
-            <Name :ID="author"/><!>
-          </a>
-          <template v-if="index<liveAuthors.length-1">,
-          </template>
-        </template>
-      </summary>
+    <header>
+      <button v-if="this.file.length" @click="this.file.removeMine()">
+        Remove from my documents
+      </button>
+      <button v-else @click="this.file.update({
+        id: ID,
+        timestamp: Date.now(),
+        type: 'text/plain',
+        _to: ['${myID}'],
+        _inContextIf: [{ _queryFailsWithout: ['_to.0'] }]
+      })">
+        Add to my documents
+      </button>
 
-      <menu>
-        <li v-for="author in characters.authors">
-          <label>
-            <input type="checkbox"
-              :checked="!blockedUsers.has(author)"
-              @input="e=>blockedUsers.has(author)?blockedUsers.delete(author):blockedUsers.add(author)">
-            <Name :ID="author"/>
-          </label>
-          <button v-if="author=='${myID}'" @click="removeAllMine">
-            Remove all my edits
-          </button>
-        </li>
-      </menu>
-    </details>
+      <details>
+        <summary>
+          Authors:
+          <template v-for="(author, index) in liveAuthors">
+            <a :href="'https://graffiti.csail.mit.edu/namebook/#/profile/'+author">
+              <Name :ID="author"/><!>
+            </a>
+            <template v-if="index<liveAuthors.length-1">,
+            </template>
+          </template>
+        </summary>
+
+        <menu>
+          <li v-for="author in characters.authors">
+            <label>
+              <input type="checkbox"
+                :checked="!blockedUsers.has(author)"
+                @input="e=>blockedUsers.has(author)?blockedUsers.delete(author):blockedUsers.add(author)">
+              <Name :ID="author"/>
+            </label>
+            <button v-if="author=='${myID}'" @click="removeAllMine">
+              Remove all my edits
+            </button>
+          </li>
+        </menu>
+      </details>
+    </header>
     <textarea @keydown="keydown($event)" :value="text" />`
 }}

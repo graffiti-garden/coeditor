@@ -5,32 +5,41 @@
 body {
   background: grey;
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-details {
+main header {
   border-bottom: 1px solid black;
   background: lightgrey;
   padding: 1em;
+}
+
+details {
+  margin-top: 1em;
 }
 
 details > summary {
   cursor: pointer;
 }
 
-textarea, details {
+main {
   width: 35em;
+  margin: 2em;
 }
 
 textarea {
   padding: 2em;
   background: whitesmoke;
-  min-height: 80vh;
+  min-height: 70vh;
   outline: 0;
   border: 0;
   font-family: inherit;
+  width: 100%;
 }
 
-textarea, dialog, details {
+main, dialog {
   box-shadow: 0.2em 0.2em 0.2em;
 }
 
@@ -58,13 +67,14 @@ a:hover {
 }
 
 header {
+  width: 100%;
   padding: 1em;
   margin: 0;
   border-bottom: 2px outset tan;
   background: NavajoWhite;
 }
 
-header menu {
+div> header menu {
   display: flex;
   justify-content: space-between;
   padding: 0;
@@ -106,13 +116,6 @@ td, th {
 
 tr:nth-child(even) {
   background: lightgrey;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
 }
 
 button {
