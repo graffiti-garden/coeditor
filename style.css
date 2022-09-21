@@ -7,27 +7,11 @@ body {
   justify-content: center;
 }
 
-p {
+textarea {
   padding: 2em;
   width: 30em;
-  white-space: pre-wrap;
-  word-break: break-word;
+  outline: 0;
+  border: 0;
   background: white;
   box-shadow: 0.2em 0.2em 0.2em;
-}
-
-input {
-  width: 0;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  outline: 1px solid var(--cursorcolor);
-  animation: blinker 1s linear infinite;
-  display: inline;
-}
-
-@keyframes blinker {
-  50% {
-    opacity: 0;
-  }
 }
