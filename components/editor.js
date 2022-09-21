@@ -2,31 +2,25 @@ import Logoot from 'https://graffiti.csail.mit.edu/graffiti-x-js/logoot.js'
 
 export default function({myID, useCollection}) { return {
 
-  setup: ()=> useCollection({
-    id: { $type: 'string' },
-    timestamp: { $type: 'number' },
-    $or: [{
-      string: { $type: 'string' },
-      ...Logoot.query('order')
-    }, {
-      type: 'tombstone'
-    }]
+  setup: ()=> ({
+    characters: useCollection({
+      id: { $type: 'string' },
+      timestamp: { $type: 'number' },
+      $or: [{
+        string: { $type: 'string' },
+        ...Logoot.query('order')
+      }, {
+        type: 'tombstone'
+      }]
+    })
   }),
 
   computed: {
     characterGroups() {
-      // Group both the characters and tombstones by their ID
-      const groups = this.objects.reduce((chain, obj)=> ({
-          ...chain,
-          [obj.id]: [ ...(chain[obj.id] || []), obj]
-        }), {})
-
-      // Sort each group by timestamp
-      // for last writer wins
+      const groups = this.characters.groupBy('id')
       for (const id in groups) {
-        groups[id] = groups[id].sort((a, b)=> b.timestamp-a.timestamp)
+        groups[id] = groups[id].sortBy('-timestamp')
       }
-
       return groups
     },
 
@@ -67,11 +61,11 @@ export default function({myID, useCollection}) { return {
         // If the only element is mine, delete
         const group = this.characterGroups[id]
         if (group.length == 1 && group[0]._by == myID) {
-          this.remove(group[0])
+          this.characters.remove(group[0])
 
         // Otherwise place a tombstone
         } else {
-          this.update({
+          this.characters.update({
             type: "tombstone",
             id: id,
             timestamp: Date.now()
@@ -91,7 +85,7 @@ export default function({myID, useCollection}) { return {
         const upperBound = (cursorIndex==this.liveCharacters.length)?
           Logoot.after : this.liveCharacters[cursorIndex].order
 
-        this.update({
+        this.characters.update({
           id: crypto.randomUUID(),
           timestamp: Date.now(),
           string: key,

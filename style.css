@@ -5,13 +5,16 @@ body {
   background: grey;
   display: flex;
   justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 textarea {
   padding: 2em;
   width: 30em;
+  height: 100vh;
   outline: 0;
   border: 0;
   background: white;
   box-shadow: 0.2em 0.2em 0.2em;
+  font-family: inherit;
 }
